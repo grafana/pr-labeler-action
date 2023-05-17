@@ -3,7 +3,6 @@ import * as github from '@actions/github'
 
 const token = core.getInput('token')
 
-// /^(feat|fix|docs|style|refactor|perf|test|chore|build)(?:\([\w\s]+\))?(!)?: /
 export const getCommitMessages = async (
   pullRequestNumber: number
 ): Promise<string[] | undefined> => {
@@ -38,10 +37,10 @@ export const getRepositorylabels = async (): Promise<string[]> => {
 
 export const addOrSetLabels = async (
   pullRequestNumber: number,
-  labels: string[]
+  labels: string[],
+  clearPrexisting: boolean
 ): Promise<void> => {
   const client = github.getOctokit(token)
-  const clearPrexisting = core.getInput('clear-prexisting')
   await client.rest.issues[clearPrexisting ? 'setLabels' : 'addLabels']({
     ...github.context.repo,
     issue_number: pullRequestNumber,

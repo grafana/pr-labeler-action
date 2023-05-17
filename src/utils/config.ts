@@ -1,12 +1,14 @@
 import yaml from 'js-yaml'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import {invertMapping} from './index'
 
 export const defaultConfig = {
   'add-missing-labels': false,
   'clear-prexisting': true,
   'include-commits': false,
   'include-title': true,
+  'label-for-breaking-changes': 'breaking',
   'label-mapping': {
     bugfix: ['fix'],
     configuration: ['build', 'ci'],
@@ -66,6 +68,15 @@ const validate = (config: Config): void => {
   }
   if (!Object.keys(config['label-mapping']).length) {
     throw new Error('At least one label-mapping needs to be provided')
+  }
+
+  const typeToLabels = invertMapping(config['label-mapping'])
+
+  const mapsToSingle = Object.values(typeToLabels).every(
+    value => value.length === 1
+  )
+  if (!mapsToSingle) {
+    core.warning('config[label-mapping] maps multiple labels to a single type')
   }
 }
 

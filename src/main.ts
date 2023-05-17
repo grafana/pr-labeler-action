@@ -1,8 +1,14 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {getConfig} from './utils/config'
-import {getCommitMessages, getLabels, getRepositorylabels} from './github'
+import {
+  addOrSetLabels,
+  getCommitMessages,
+  getLabels,
+  getRepositorylabels
+} from './github'
 import {PullRequest} from './types'
+import {mapTypesToLabels, parseMessages} from './messages'
 
 async function run(): Promise<void> {
   try {
@@ -18,17 +24,55 @@ async function run(): Promise<void> {
 
     const ref = prContext.head.ref
     const config = await getConfig(configPath, ref)
-    const repoLabels = await getRepositorylabels()
 
-    const stringsToGetLabelsFor = []
+    const messageSet = new Set<string>()
     if (config['include-title']) {
-      stringsToGetLabelsFor.push(prContext.title)
+      messageSet.add(prContext.title || '')
     }
     if (config['include-commits']) {
-      stringsToGetLabelsFor.push(getCommitMessages(prContext.number))
+      const commitMessages = await getCommitMessages(prContext.number)
+      if (commitMessages) {
+        for (const message of commitMessages) {
+          messageSet.add(message)
+        }
+      }
     }
+
+    const parseMessagesPayload = parseMessages(messageSet)
+
+    const labelsFromMessages = mapTypesToLabels(
+      parseMessagesPayload,
+      config['label-mapping'],
+      config['label-for-breaking-changes']
+    )
+
+    const repoLabels = await getRepositorylabels()
+
+    const missingLabels = new Set<string>()
+
+    for (const label of labelsFromMessages) {
+      if (!repoLabels.includes(label)) {
+        missingLabels.add(label)
+      }
+    }
+
+    if ([...missingLabels].length && !config['add-missing-labels']) {
+      throw new Error(
+        `Not all labels being added are included in the repository. Please add the labels ${JSON.stringify(
+          [...missingLabels]
+        )} or set config["add-missing-labels"] to true`
+      )
+    }
+
+    await addOrSetLabels(
+      prContext.number,
+      [...labelsFromMessages],
+      config['clear-prexisting']
+    )
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
   }
 }
 
