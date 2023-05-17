@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jest"
+    ],
+    "paths": {
+      "*": [
+        ""
+      ]
+    }
+  },
+  "resolveJsonModule": true,
+  "include": [
+    "src",
+    "__tests__"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,23 @@
+add-missing-labels: false # Whether to add missing labels to the repository
+clear-prexisting: true # Whether to remove preexisting labels from the PR in favor of the generated one
+include-commits: false # Consider the PR commit messages when adding labels
+include-title: true # Consider the PR title when adding labels
+label-mapping:
+  bugfix: ['fix']
+  configuration: ['build', 'ci']
+  documentation: ['docs']
+  feature: ['feat']
+  misc: ['chore','performance','refactor','style']
+  test: ['test']
+types:
+  - build
+  - chore
+  - ci
+  - docs
+  - feat
+  - fix
+  - perf
+  - refactor
+  - style
+  - test
+

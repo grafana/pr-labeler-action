@@ -1,11 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'PR Labeler'
+description: 'Apply labels to your PR based on the title and/or commit messages'
+author: 'Grafana'
 inputs:
-  milliseconds: # change this
+  configuration-path:
+    required: false
+    description: 'Path to configurations'
+    default: '.github/pr-labeler.yml'
+  token:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'GitHub access token'
 runs:
   using: 'node16'
   main: 'dist/index.js'

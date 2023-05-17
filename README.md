@@ -2,6 +2,12 @@
   <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
 </p>
 
+
+Credit to [TimonVS/pr-labeler-action](https://github.com/TimonVS/pr-labeler-action)
+[action-runner/conventional-labeler](https://github.com/action-runner/conventional-labeler)
+
+
+
 # Create a JavaScript Action using TypeScript
 
 Use this template to bootstrap the creation of a TypeScript action.:rocket:
