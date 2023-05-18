@@ -16,19 +16,7 @@ export const defaultConfig = {
     feature: ['feat'],
     misc: ['chore', 'performance', 'refactor', 'style'],
     test: ['test']
-  },
-  types: [
-    'build',
-    'chore',
-    'ci',
-    'docs',
-    'feat',
-    'fix',
-    'perf',
-    'refactor',
-    'style',
-    'test'
-  ]
+  }
 }
 
 export type Config = typeof defaultConfig

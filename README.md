@@ -1,111 +1,80 @@
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/grafana/pr-labeler-action/actions"><img alt="pr-labeler-action status" src="https://github.com/grafana/pr-labeler-action/workflows/build-test/badge.svg"></a>
 </p>
 
+# PR Labeler Action
 
-Credit to [TimonVS/pr-labeler-action](https://github.com/TimonVS/pr-labeler-action)
-[action-runner/conventional-labeler](https://github.com/action-runner/conventional-labeler)
+Yet another iteration on a PR labeler action. This action will add labels to your PR based on the PR title and/or commit
+messages. It does so by parsing the strings in a conventional commitish way. Meaning that it doesn't validate types, but
+it does follow the syntax of `type(scope)!: message` where `(scope)` and `!` are optional.
 
+## Inputs
 
+| key                | description                                               | default              | required |
+|--------------------|-----------------------------------------------------------|----------------------|----------|
+| configuration-path | Path to the configuration file                            | `.github/pr-labeler` | `false`  |
+| token              | Github access token with permission to add labels to a PR |                      | `true`   |
 
-# Create a JavaScript Action using TypeScript
+## Configuration
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+There is a default configuration that is provided, but if you would like to customize it add `pr-labeler.yml` to the
+`.github/` directory.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+| key                        | type      | default                               | description                                                                      |
+|----------------------------|-----------|---------------------------------------|----------------------------------------------------------------------------------|
+| add-missing-labels         | `boolean` | `false`                               | Whether missing labels should be added to the repository                         |
+| clear-prexisting           | `boolean` | `true`                                | Whether the prexisting labels on the PR should be removed                        |
+| include-commits            | `boolean` | `false`                               | Whether to consider commit messages when adding labels                           |
+| include-title              | `boolean` | `true`                                | Whether to consider the pr title when adding labels                              |
+| label-for-breaking-changes | `string`  | `breaking`                            | The label to be used for breaking changes. Can be set to empty string to ignore  |
+| label-mapping              | `object`  | [See default config](#default-config) | Label to array of types for mapping. Labels and types can be whatever you decide |
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+### Default config
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+add-missing-labels: false # Whether to add missing labels to the repository
+clear-prexisting: true # Whether to remove preexisting labels from the PR in favor of the generated one
+include-commits: false # Consider the PR commit messages when adding labels
+include-title: true # Consider the PR title when adding labels
+label-for-breaking-changes: 'breaking' # Label to be used when the message has the breaking change syntax '!:' E.g. "feat!: This break things"
+label-mapping: # Label to array of types for mapping
+  bugfix: [ 'fix' ]
+  configuration: [ 'build', 'ci' ]
+  documentation: [ 'docs' ]
+  feature: [ 'feat' ]
+  misc: [ 'chore','performance','refactor','style' ]
+  test: [ 'test' ]
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+## Example usage
 
-## Usage:
+```yaml
+# .github/pr-labeler.yml
+add-missing-labels: true
+label-mapping:
+  bugfix: [ 'fix', 'bug' ]
+  feature: [ 'feat', 'feature' ]
+  misc: [ 'chore','performance','refactor','style' ]
+```
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+```yaml
+# .github/workflows/label-prs.yml
+name: 'Label PR'
+on:
+  pull_request:
+
+jobs:
+  label-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: grafana/pr-labeler-action@v0.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+The above example workflow will do the following
+
+- Add any labels that are missing in the repository
+- Map types to the three labels `bugfix`, `feature`, and `misc`
+- If the PR title indicates a breaking change E.g. `feat!: add this feature` (notice the `!`) it will also add
+  the `breaking` label

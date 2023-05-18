@@ -52,7 +52,7 @@ clear-prexisting: false
 
     expect(config['add-missing-labels']).toBeTruthy() // not default
     expect(config['clear-prexisting']).toBeFalsy() // not default
-    expect(config.types).toEqual(defaultConfig.types)
+    expect(config['label-mapping']).toEqual(defaultConfig['label-mapping'])
     expect(config['include-title']).toEqual(defaultConfig['include-title'])
   })
   describe('config validation', () => {

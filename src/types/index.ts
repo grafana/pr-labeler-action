@@ -6,15 +6,3 @@ export type PullRequest = {
   number: number
   title?: string
 }
-
-export type CommitType =
-  | 'build'
-  | 'chore'
-  | 'ci'
-  | 'docs'
-  | 'feat'
-  | 'fix'
-  | 'perf'
-  | 'refactor'
-  | 'style'
-  | 'test'

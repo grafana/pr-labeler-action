@@ -10,15 +10,3 @@ label-mapping: # Label to array of types for mapping
   feature: ['feat']
   misc: ['chore','performance','refactor','style']
   test: ['test']
-types:
-  - build
-  - chore
-  - ci
-  - docs
-  - feat
-  - fix
-  - perf
-  - refactor
-  - style
-  - test
-

@@ -1,6 +1,6 @@
 import {createSandbox} from 'sinon'
 
-import {mapTypesToLabels} from '../src/messages'
+import {mapTypesToLabels, parseMessages} from '../src/messages'
 import {defaultConfig} from '../src/utils/config'
 
 describe('messages', () => {
@@ -103,6 +103,63 @@ describe('messages', () => {
         'improvement'
       ]
       expect(response).toEqual(new Set(expected))
+    })
+  })
+  describe('parseMessages', () => {
+    it('can parse a single message', () => {
+      const parsedPayload = parseMessages(new Set(['feat: test message']))
+      expect(parsedPayload.types).toEqual(new Set(['feat']))
+    })
+    it('only returns unique types', () => {
+      const parsedPayload = parseMessages(
+        new Set(['feat: test message 1', 'feat: test message 2'])
+      )
+      expect(parsedPayload.types).toEqual(new Set(['feat']))
+    })
+    it('can return multiple types', () => {
+      const parsedPayload = parseMessages(
+        new Set(['feat: test message 1', 'fix: test message 2'])
+      )
+      expect(parsedPayload.types).toEqual(new Set(['feat', 'fix']))
+    })
+    it('can parse a message without a type', () => {
+      const parsedPayload = parseMessages(
+        new Set([
+          'feat: test message 1',
+          'no type on this one',
+          '(weird): message',
+          '(scope)!: and breaking',
+          'fix: test message 2'
+        ])
+      )
+      expect(parsedPayload.types).toEqual(new Set(['feat', 'fix']))
+      expect(parsedPayload.scopes).toEqual(new Set())
+      expect(parsedPayload.includesBreakingChange).toBeFalsy()
+    })
+    it('parses messages with scopes', () => {
+      const parsedPayload = parseMessages(
+        new Set(['feat(scope-here): test message 1'])
+      )
+      expect(parsedPayload.types).toEqual(new Set(['feat']))
+      expect(parsedPayload.scopes).toEqual(new Set(['scope-here']))
+    })
+    it('parses scope and breaking change', () => {
+      const parsedPayload = parseMessages(
+        new Set(['feat(scope-here)!: test message 1'])
+      )
+      expect(parsedPayload.types).toEqual(new Set(['feat']))
+      expect(parsedPayload.scopes).toEqual(new Set(['scope-here']))
+      expect(parsedPayload.includesBreakingChange).toBeTruthy()
+    })
+    it('flags a breaking change', () => {
+      const parsedPayload = parseMessages(new Set(['feat!: breaking change']))
+      expect(parsedPayload.includesBreakingChange).toBeTruthy()
+    })
+    it('flags a breaking change even if subsequent messages are not breaking', () => {
+      const parsedPayload = parseMessages(
+        new Set(['feat!: breaking change', 'feat: not breaking change'])
+      )
+      expect(parsedPayload.includesBreakingChange).toBeTruthy()
     })
   })
 })

@@ -1,12 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {getConfig} from './utils/config'
-import {
-  addOrSetLabels,
-  getCommitMessages,
-  getLabels,
-  getRepositorylabels
-} from './github'
+import {addOrSetLabels, getCommitMessages, getRepositorylabels} from './github'
 import {PullRequest} from './types'
 import {mapTypesToLabels, parseMessages} from './messages'
 
