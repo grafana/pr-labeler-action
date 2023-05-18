@@ -10,24 +10,24 @@ it does follow the syntax of `type(scope)!: message` where `(scope)` and `!` are
 
 ## Inputs
 
-| key                | description                                               | default              | required |
-|--------------------|-----------------------------------------------------------|----------------------|----------|
-| configuration-path | Path to the configuration file                            | `.github/pr-labeler` | `false`  |
-| token              | Github access token with permission to add labels to a PR |                      | `true`   |
+| key                  | description                                               | default              | required |
+|----------------------|-----------------------------------------------------------|----------------------|----------|
+| `configuration-path` | Path to the configuration file                            | `.github/pr-labeler` | `false`  |
+| `token`              | Github access token with permission to add labels to a PR |                      | `true`   |
 
 ## Configuration
 
 There is a default configuration that is provided, but if you would like to customize it add `pr-labeler.yml` to the
 `.github/` directory.
 
-| key                        | type      | default                               | description                                                                      |
-|----------------------------|-----------|---------------------------------------|----------------------------------------------------------------------------------|
-| add-missing-labels         | `boolean` | `false`                               | Whether missing labels should be added to the repository                         |
-| clear-prexisting           | `boolean` | `true`                                | Whether the prexisting labels on the PR should be removed                        |
-| include-commits            | `boolean` | `false`                               | Whether to consider commit messages when adding labels                           |
-| include-title              | `boolean` | `true`                                | Whether to consider the pr title when adding labels                              |
-| label-for-breaking-changes | `string`  | `breaking`                            | The label to be used for breaking changes. Can be set to empty string to ignore  |
-| label-mapping              | `object`  | [See default config](#default-config) | Label to array of types for mapping. Labels and types can be whatever you decide |
+| key                          | type      | default                               | description                                                                      |
+|------------------------------|-----------|---------------------------------------|----------------------------------------------------------------------------------|
+| `add-missing-labels`         | `boolean` | `false`                               | Whether missing labels should be added to the repository                         |
+| `clear-prexisting`           | `boolean` | `true`                                | Whether the prexisting labels on the PR should be removed                        |
+| `include-commits`            | `boolean` | `false`                               | Whether to consider commit messages when adding labels                           |
+| `include-title`              | `boolean` | `true`                                | Whether to consider the pr title when adding labels                              |
+| `label-for-breaking-changes` | `string`  | `breaking`                            | The label to be used for breaking changes. Can be set to empty string to ignore  |
+| `label-mapping`              | `object`  | [See default config](#default-config) | Label to array of types for mapping. Labels and types can be whatever you decide |
 
 ### Default config
 
