@@ -1159,10 +1159,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.16.12":
-  version: 18.16.12
-  resolution: "@types/node@npm:18.16.12"
-  checksum: 90b316c097a059534870bc8e358c7996d99e3bb4395c88a91b893b925ad34e32ff1177009ec6c16a6467266414dca64ec9613e9e6bb3f91b6de0ab629d3bb3b9
+"@types/node@npm:^20.3.0":
+  version: 20.3.0
+  resolution: "@types/node@npm:20.3.0"
+  checksum: 613e878174febc0104dae210088645cbb5096a19ae5fdf57fbc06fa6ef71755b839858c2b313fb8c1df8b7c6660e1b5f7a64db2126af9d47d1d9238e2bc0a86d
   languageName: node
   linkType: hard
 
@@ -4903,7 +4903,7 @@ __metadata:
     "@actions/github": ^5.1.1
     "@types/jest": ^29.5.1
     "@types/js-yaml": ^4.0.5
-    "@types/node": ^18.16.12
+    "@types/node": ^20.3.0
     "@types/sinon": ^10.0.15
     "@typescript-eslint/parser": ^5.59.2
     "@vercel/ncc": ^0.36.1
