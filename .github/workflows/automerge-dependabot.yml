@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   dependabot:
-    runs-on: ubuntu-x64-small
+    runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
       - name: Dependabot metadata
