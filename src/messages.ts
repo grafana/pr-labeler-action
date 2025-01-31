@@ -1,65 +1,63 @@
-import * as core from '@actions/core'
-import {invertMapping} from './utils'
+import { warning as logWarning } from '@actions/core';
+import { invertMapping } from './utils';
 export const mapTypesToLabels = (
   payload: ParseMessagesPayload,
-  labelMapping: {[p: string]: string[]},
+  labelMapping: { [p: string]: string[] },
   labelForBreakingChanges: string
 ): Set<string> => {
-  const labels = new Set<string>()
+  const labels = new Set<string>();
 
-  const typeToLabels: {[p: string]: string[]} = invertMapping(labelMapping)
+  const typeToLabels: { [p: string]: string[] } = invertMapping(labelMapping);
 
   for (const type of payload.types) {
-    const mappedLabels: string[] = typeToLabels[type]
+    const mappedLabels: string[] = typeToLabels[type];
     if (mappedLabels) {
       for (const label of mappedLabels) {
-        labels.add(label)
+        labels.add(label);
       }
     } else {
-      core.warning(
-        `Type [${type}] did not map to a label. Check your label-mapping config`
-      )
+      logWarning(`Type [${type}] did not map to a label. Check your label-mapping config`);
     }
   }
 
   if (payload.includesBreakingChange && labelForBreakingChanges) {
-    labels.add(labelForBreakingChanges)
+    labels.add(labelForBreakingChanges);
   }
 
-  return labels
-}
+  return labels;
+};
 
 type ParseMessagesPayload = {
-  includesBreakingChange: boolean
-  scopes: Set<string>
-  types: Set<string>
-}
+  includesBreakingChange: boolean;
+  scopes: Set<string>;
+  types: Set<string>;
+};
 
 /**
  * Parses through messages and returns Sets of types, scopes, and whether breaking changes are included
  */
 export const parseMessages = (messages: Set<string>): ParseMessagesPayload => {
-  const typeRegex = /^(\w+)(\(.+\))?(!)?:\s.*/
+  const typeRegex = /^(\w+)(\(.+\))?(!)?:\s.*/;
 
-  const scopes = new Set<string>()
-  const types = new Set<string>()
-  let includesBreakingChange = false
+  const scopes = new Set<string>();
+  const types = new Set<string>();
+  let includesBreakingChange = false;
 
   for (const message of messages) {
-    const match = typeRegex.exec(message)
+    const match = typeRegex.exec(message);
     if (match) {
-      const type = match[1]
-      const scope = match[2] ? match[2].slice(1, -1) : null // Remove the parentheses
-      const isBreakingChange = !!match[3]
+      const type = match[1];
+      const scope = match[2] ? match[2].slice(1, -1) : null; // Remove the parentheses
+      const isBreakingChange = !!match[3];
 
-      types.add(type)
+      types.add(type);
 
       if (isBreakingChange) {
-        includesBreakingChange = true
+        includesBreakingChange = true;
       }
 
       if (scope) {
-        scopes.add(scope)
+        scopes.add(scope);
       }
     }
   }
@@ -67,6 +65,6 @@ export const parseMessages = (messages: Set<string>): ParseMessagesPayload => {
   return {
     includesBreakingChange,
     scopes,
-    types
-  }
-}
+    types,
+  };
+};

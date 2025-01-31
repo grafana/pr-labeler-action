@@ -1,7 +1,7 @@
-import yaml from 'js-yaml'
-import * as core from '@actions/core'
-import * as github from '@actions/github'
-import {invertMapping} from './index'
+import { load as loadYaml } from 'js-yaml';
+import { getInput, warning as logWarning } from '@actions/core';
+import { context, getOctokit } from '@actions/github';
+import { invertMapping } from './index';
 
 export const defaultConfig = {
   'add-missing-labels': false,
@@ -15,69 +15,64 @@ export const defaultConfig = {
     documentation: ['docs'],
     feature: ['feat'],
     misc: ['chore', 'performance', 'refactor', 'style'],
-    test: ['test']
-  }
-}
+    test: ['test'],
+  },
+};
 
-export type Config = typeof defaultConfig
+export type Config = typeof defaultConfig;
 
-type HttpError = typeof Error & {status: number | undefined}
+type HttpError = typeof Error & { status: number | undefined };
+
 export async function getConfig(path: string, ref: string): Promise<Config> {
   try {
-    const client = github.getOctokit(core.getInput('token'))
+    const client = getOctokit(getInput('token'));
     const response = await client.rest.repos.getContent({
-      ...github.context.repo,
+      ...context.repo,
       path,
-      ref
-    })
+      ref,
+    });
 
     if ('content' in response.data) {
-      const config = {...defaultConfig, ...parseConfig(response.data.content)}
-      validate(config)
-      return config
+      const config = { ...defaultConfig, ...parseConfig(response.data.content) };
+      validate(config);
+      return config;
     }
 
-    throw new Error(`${path} does not point to a config file`)
+    throw new Error(`${path} does not point to a config file`);
   } catch (e) {
     // File wasn't found returning the default config
     if ((e as HttpError).status === 404) {
-      core.warning(`[${path}] was not found; returning default config`)
-      return defaultConfig
+      logWarning(`[${path}] was not found; returning default config`);
+      return defaultConfig;
     }
-    throw e
+    throw e;
   }
 }
 
 const validate = (config: Config): void => {
   if (!config['include-title'] && !config['include-commits']) {
-    throw new Error(
-      'At least one of ["include-title","include-commits"] must be enabled'
-    )
+    throw new Error('At least one of ["include-title","include-commits"] must be enabled');
   }
   if (!Object.keys(config['label-mapping']).length) {
-    throw new Error('At least one label-mapping needs to be provided')
+    throw new Error('At least one label-mapping needs to be provided');
   }
 
-  const typeToLabels = invertMapping(config['label-mapping'])
+  const typeToLabels = invertMapping(config['label-mapping']);
 
-  const mapsToSingle = Object.values(typeToLabels).every(
-    value => value.length === 1
-  )
+  const mapsToSingle = Object.values(typeToLabels).every((value) => value.length === 1);
   if (!mapsToSingle) {
-    core.warning('config[label-mapping] maps multiple labels to a single type')
+    logWarning('config[label-mapping] maps multiple labels to a single type');
   }
-}
+};
 
 const parseConfig = (content: string): Config => {
-  const decodedContent = Buffer.from(content, 'base64').toString()
-  const parsedConfig = yaml.load(decodedContent)
+  const decodedContent = Buffer.from(content, 'base64').toString();
+  const parsedConfig = loadYaml(decodedContent);
 
-  const isValidConfig = Object.keys(parsedConfig as object).every(key =>
-    Object.keys(defaultConfig).includes(key)
-  )
+  const isValidConfig = Object.keys(parsedConfig as object).every((key) => Object.keys(defaultConfig).includes(key));
 
   if (!isValidConfig) {
-    throw new Error('The parsed file was not valid; check ')
+    throw new Error('The parsed file was not valid; check ');
   }
-  return parsedConfig as Config
-}
+  return parsedConfig as Config;
+};
