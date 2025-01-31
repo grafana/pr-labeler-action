@@ -8,7 +8,7 @@
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint .",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
     "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
