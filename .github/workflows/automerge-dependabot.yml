@@ -1,0 +1,29 @@
+name: Dependabot auto-merge
+on: pull_request_target
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7 # v2.3.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{ ! ( steps.metadata.outputs.package-ecosystem == 'npm' && contains(steps.metadata.outputs.dependency-names, '@grafana/')) }} # always run unless the ecosystem is npm and the dependencies include @grafana
+        run: gh pr review --approve "$PR_URL" && gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Tag team for review if grafana dependency
+        if: steps.metadata.outputs.package-ecosystem == 'npm' && contains(steps.metadata.outputs.dependency-names, '@grafana/') # tag team as reviewer if we have a @grafana dependency
+        run: gh pr edit --add-reviewer "grafana/adaptive-telemetry" "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
