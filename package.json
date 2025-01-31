@@ -11,7 +11,7 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
   },
   "repository": {
     "type": "git",
@@ -46,5 +46,5 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
-  "packageManager": "yarn@3.5.1"
+  "packageManager": "yarn@4.6.0"
 }
