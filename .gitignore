@@ -1,3 +1,6 @@
+.idea/
+.vscode/
+
 # Dependency directory
 node_modules
 
@@ -105,3 +108,5 @@ lib/**/*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+venv

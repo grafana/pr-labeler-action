@@ -10,10 +10,10 @@ it does follow the syntax of `type(scope)!: message` where `(scope)` and `!` are
 
 ## Inputs
 
-| key                  | description                                               | default              | required |
-|----------------------|-----------------------------------------------------------|----------------------|----------|
-| `configuration-path` | Path to the configuration file                            | `.github/pr-labeler` | `false`  |
-| `token`              | Github access token with permission to add labels to a PR |                      | `true`   |
+| key                  | description                                                                                                         | default              | required |
+|----------------------|---------------------------------------------------------------------------------------------------------------------|----------------------|----------|
+| `configuration-path` | Path to the configuration file                                                                                      | `.github/pr-labeler` | `false`  |
+| `token`              | Github access token with `contents: read`, `issues: read`, `pull-requests: write` permissions to add labels to a PR |                      | `true`   |
 
 ## Configuration
 
@@ -65,12 +65,21 @@ on:
 
 jobs:
   label-pr:
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: grafana/pr-labeler-action@v0.1.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+> [!IMPORTANT]
+> Permissions are specified within the job definition. This prevents permitting more than is needed in other jobs.
+> 
+> If you prefer not using the generated `secrets.GITHUB_TOKEN` you can use a PAT or Github App (recommended) token with the correct permissions and omit the permissions block
 
 The above example workflow will do the following
 
