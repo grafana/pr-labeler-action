@@ -2651,9 +2651,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-github@npm:^5.1.7":
-  version: 5.1.7
-  resolution: "eslint-plugin-github@npm:5.1.7"
+"eslint-plugin-github@npm:^5.1.8":
+  version: 5.1.8
+  resolution: "eslint-plugin-github@npm:5.1.8"
   dependencies:
     "@eslint/compat": "npm:^1.2.3"
     "@eslint/eslintrc": "npm:^3.1.0"
@@ -2681,7 +2681,7 @@ __metadata:
     eslint: ^8 || ^9
   bin:
     eslint-ignore-errors: bin/eslint-ignore-errors.js
-  checksum: 10/74bb77301cdec0c418eaafcdfc578ed11a07b96632d5502b07aea97f6840e3f149c0e0e9c7e25eff4052f1b7a60373fcc011c7ec6e63ed78d4c855e0652a91bc
+  checksum: 10/27923f34ba12f1a2d0fbead47ac56d5b8557b58545b25fc9fbd108260dd38045a4f342cdcbf3fa110df7ae321c0892909abc44ac6c7cd02496396ca5902ef46b
   languageName: node
   linkType: hard
 
@@ -5178,7 +5178,7 @@ __metadata:
     "@vercel/ncc": "npm:^0.38.3"
     conventional-changelog-metahub: "npm:^4.0.1"
     eslint: "npm:^9.19.0"
-    eslint-plugin-github: "npm:^5.1.7"
+    eslint-plugin-github: "npm:^5.1.8"
     eslint-plugin-jest: "npm:^28.11.0"
     eslint-plugin-prettier: "npm:^5.2.3"
     globals: "npm:^15.14.0"
