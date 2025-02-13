@@ -3316,10 +3316,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^15.12.0, globals@npm:^15.14.0":
+"globals@npm:^15.12.0":
   version: 15.14.0
   resolution: "globals@npm:15.14.0"
   checksum: 10/e35ffbdbc024d6381efca906f67211a7bbf935db2af8c14a65155785479e28b3e475950e5933bb6b296eed54b6dcd924e25b26dbc8579b1bde9d5d25916e1c5f
+  languageName: node
+  linkType: hard
+
+"globals@npm:^15.15.0":
+  version: 15.15.0
+  resolution: "globals@npm:15.15.0"
+  checksum: 10/7f561c87b2fd381b27fc2db7df8a4ea7a9bb378667b8a7193e61fd2ca3a876479174e2a303a74345fbea6e1242e16db48915c1fd3bf35adcf4060a795b425e18
   languageName: node
   linkType: hard
 
@@ -5197,7 +5204,7 @@ __metadata:
     eslint-plugin-github: "npm:^5.1.8"
     eslint-plugin-jest: "npm:^28.11.0"
     eslint-plugin-prettier: "npm:^5.2.3"
-    globals: "npm:^15.14.0"
+    globals: "npm:^15.15.0"
     jest: "npm:^29.7.0"
     js-yaml: "npm:^4.1.0"
     prettier: "npm:^3.5.0"
