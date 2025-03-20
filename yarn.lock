@@ -1078,7 +1078,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/fake-timers@npm:^13.0.1, @sinonjs/fake-timers@npm:^13.0.2":
+"@sinonjs/fake-timers@npm:^13.0.1, @sinonjs/fake-timers@npm:^13.0.5":
   version: 13.0.5
   resolution: "@sinonjs/fake-timers@npm:13.0.5"
   dependencies:
@@ -5285,7 +5285,7 @@ __metadata:
     jest: "npm:^29.7.0"
     js-yaml: "npm:^4.1.0"
     prettier: "npm:^3.5.3"
-    sinon: "npm:^19.0.2"
+    sinon: "npm:^19.0.4"
     ts-jest: "npm:^29.2.6"
     typescript: "npm:^5.8.2"
     typescript-eslint: "npm:^8.26.0"
@@ -5727,17 +5727,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sinon@npm:^19.0.2":
-  version: 19.0.2
-  resolution: "sinon@npm:19.0.2"
+"sinon@npm:^19.0.4":
+  version: 19.0.4
+  resolution: "sinon@npm:19.0.4"
   dependencies:
     "@sinonjs/commons": "npm:^3.0.1"
-    "@sinonjs/fake-timers": "npm:^13.0.2"
+    "@sinonjs/fake-timers": "npm:^13.0.5"
     "@sinonjs/samsam": "npm:^8.0.1"
     diff: "npm:^7.0.0"
     nise: "npm:^6.1.1"
     supports-color: "npm:^7.2.0"
-  checksum: 10/0be47968e9352269d0bdd26cdae7ae4e67d94fa007e8417d1e66ac95ba8537214edc770aff01b0f5a6f07588a1f7d3c947fff9366d799db85d3a4c405b875460
+  checksum: 10/c38e4de00b1829f629f331abb4fc77c4f4fdc905126e7500a49a3c46bc85ba7b93a365aa8d7e7f7b8dc8e0f78554a31c6c3c6258130184c9ff88d5a3062e1cee
   languageName: node
   linkType: hard
 
